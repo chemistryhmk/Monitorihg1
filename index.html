@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Моніторинг впровадження ШІ — ХМФК</title>
+    <style>
+        :root {
+            --bg-color: #f8fafc;
+            --card-bg: #ffffff;
+            --primary: #2563eb;
+            --primary-hover: #1d4ed8;
+            --text-main: #0f172a;
+            --text-muted: #475569;
+            --border: #cbd5e1;
+            --accent: #eff6ff;
+            --radius: 12px;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            margin: 0;
+            padding: 20px;
+            font-size: 18px;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .header-card {
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            padding: 32px;
+            margin-bottom: 24px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+            border-top: 6px solid var(--primary);
+        }
+
+        .badge {
+            display: inline-block;
+            background: var(--accent);
+            color: var(--primary);
+            font-weight: 700;
+            font-size: 16px;
+            padding: 6px 14px;
+            border-radius: 20px;
+            margin-bottom: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        h1 {
+            font-size: 28px;
+            margin: 0 0 16px 0;
+            color: var(--text-main);
+            line-height: 1.3;
+        }
+
+        .intro-text {
+            color: var(--text-muted);
+            margin-bottom: 20px;
+            font-size: 18px;
+        }
+
+        .privacy-box {
+            background: #f1f5f9;
+            border-left: 4px solid #64748b;
+            padding: 12px 16px;
+            font-size: 16px;
+            color: var(--text-muted);
+            border-radius: 4px;
+        }
+
+        .card {
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            padding: 28px;
+            margin-bottom: 24px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
+            border: 1px solid var(--border);
+        }
+
+        .section-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 20px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid var(--accent);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .question-group {
+            margin-bottom: 28px;
+        }
+
+        .question-title {
+            font-size: 19px;
+            font-weight: 600;
+            margin-bottom: 12px;
+            color: var(--text-main);
+        }
+
+        .required {
+            color: #dc2626;
+            margin-left: 4px;
+        }
+
+        .option-label {
+            display: flex;
+            align-items: flex-start;
+            padding: 14px 16px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            margin-bottom: 10px;
+            cursor: pointer;
+            transition: background 0.15s, border-color 0.15s;
+        }
+
+        .option-label:hover {
+            background-color: var(--accent);
+            border-color: var(--primary);
+        }
+
+        .option-label input[type="radio"],
+        .option-label input[type="checkbox"] {
+            margin-top: 4px;
+            margin-right: 14px;
+            width: 22px;
+            height: 22px;
+            accent-color: var(--primary);
+            flex-shrink: 0;
+        }
+
+        textarea {
+            width: 100%;
+            padding: 14px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            font-size: 17px;
+            font-family: inherit;
+            box-sizing: border-box;
+            min-height: 110px;
+            resize: vertical;
+        }
+
+        textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+        }
+
+        .btn-submit {
+            background-color: var(--primary);
+            color: white;
+            font-size: 20px;
+            font-weight: 700;
+            padding: 16px 32px;
+            border: none;
+            border-radius: var(--radius);
+            cursor: pointer;
+            width: 100%;
+            transition: background 0.2s, transform 0.1s;
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
+        }
+
+        .btn-submit:hover {
+            background-color: var(--primary-hover);
+        }
+
+        .btn-submit:active {
+            transform: scale(0.99);
+        }
+
+        .progress-bar-container {
+            height: 8px;
+            background: #e2e8f0;
+            border-radius: 4px;
+            overflow: hidden;
+            margin-bottom: 24px;
+        }
+
+        .progress-bar {
+            height: 100%;
+            width: 0%;
+            background: var(--primary);
+            transition: width 0.3s ease;
+        }
+
+        #status-message {
+            display: none;
+            padding: 20px;
+            border-radius: var(--radius);
+            font-size: 19px;
+            font-weight: 600;
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .status-success {
+            background-color: #dcfce7;
+            color: #166534;
+            border: 1px solid #bbf7d0;
+        }
+
+        .status-error {
+            background-color: #fee2e2;
+            color: #991b1b;
+            border: 1px solid #fecaca;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="header-card">
+        <span class="badge">💡 МОНІТОРИНГ ХМФК</span>
+        <h1>Практичні результати та перспективи впровадження інструментів ШІ</h1>
+        <p class="intro-text">
+            Шановні колеги! Мета опитування — дослідити глибину та реальні наслідки імплементації сервісів штучного інтелекту в освітній процес, виявити успішні кейси, практичні бар'єри та сформувати запит на подальші методичні заходи.
+        </p>
+        <div class="privacy-box">
+            🔒 Опитування є конфіденційним. Дані будуть використані в узагальненому вигляді.
+        </div>
+    </div>
+
+    <div class="progress-bar-container">
+        <div class="progress-bar" id="progress"></div>
+    </div>
+
+    <form id="aiSurveyForm">
+
+        <!-- РОЗДІЛ 1 -->
+        <div class="card">
+            <div class="section-title">Розділ 1. Динаміка змін та інструментальний стек</div>
+
+            <div class="question-group">
+                <div class="question-title">1.1 Як змінилася ваша практика використання ШІ?<span class="required">*</span></div>
+                <label class="option-label">
+                    <input type="radio" name="q1_dynamics" value="Стрибок якості" required>
+                    <span><b>«Стрибок якості»</b> — Почав(ла) активно використовувати нові сервіси (NotebookLM, аватари, симулятори тощо).</span>
+                </label>
+                <label class="option-label">
+                    <input type="radio" name="q1_dynamics" value="Закріплення практики">
+                    <span><b>«Закріплення практики»</b> — Продовжую системно використовувати раніше освоєні інструменти.</span>
+                </label>
+                <label class="option-label">
+                    <input type="radio" name="q1_dynamics" value="Перехід до дій">
+                    <span><b>«Перехід до дій»</b> — Здійснив(ла) перші успішні спроби інтеграції після майстер-класу.</span>
+                </label>
+                <label class="option-label">
+                    <input type="radio" name="q1_dynamics" value="Спроба без інтеграції">
+                    <span><b>«Спроба без інтеграції»</b> — Протестував(ла) сервіси, але в навчальний процес поки не впровадив(ла).</span>
+                </label>
+                <label class="option-label">
+                    <input type="radio" name="q1_dynamics" value="Без змін">
+                    <span><b>«Без змін»</b> — Поки не використовую ШІ у своїй професійній діяльності.</span>
+                </label>
+            </div>
+
+            <div class="question-group">
+                <div class="question-title">1.2 Вкажіть ступінь освоєння сервісів:</div>
+                
+                <p><b>NotebookLM:</b></p>
+                <label class="option-label"><input type="radio" name="q2_notebooklm" value="Регулярно" required> Регулярно</label>
+                <label class="option-label"><input type="radio" name="q2_notebooklm" value="Експериментую"> Експериментую</label>
+                <label class="option-label"><input type="radio" name="q2_notebooklm" value="Не використовував"> Не використовував(ла)</label>
+
+                <p><b>Gemini / Claude / ChatGPT:</b></p>
+                <label class="option-label"><input type="radio" name="q2_llm" value="Регулярно" required> Регулярно</label>
+                <label class="option-label"><input type="radio" name="q2_llm" value="Експериментую"> Експериментую</label>
+                <label class="option-label"><input type="radio" name="q2_llm" value="Не використовував"> Не використовував(ла)</label>
+
+                <p><b>Vidnoz / D-ID (Відеоаватари):</b></p>
+                <label class="option-label"><input type="radio" name="q2_video" value="Регулярно" required> Регулярно</label>
+                <label class="option-label"><input type="radio" name="q2_video" value="Експериментую"> Експериментую</label>
+                <label class="option-label"><input type="radio" name="q2_video" value="Не використовував"> Не використовував(ла)</label>
+
+                <p><b>GitHub Pages (Публікація симуляторів):</b></p>
+                <label class="option-label"><input type="radio" name="q2_github" value="Регулярно" required> Регулярно</label>
+                <label class="option-label"><input type="radio" name="q2_github" value="Експериментую"> Експериментую</label>
+                <label class="option-label"><input type="radio" name="q2_github" value="Не використовував"> Не використовував(ла)</label>
+            </div>
+        </div>
+
+        <!-- РОЗДІЛ 2 -->
+        <div class="card">
+            <div class="section-title">Розділ 2. Практична цінність та трансформація часу</div>
+
+            <div class="question-group">
+                <div class="question-title">2.1 Напрями використання ШІ (обрати всі актуальні):</div>
+                <label class="option-label"><input type="checkbox" name="q3_areas" value="Презентації"> Генерація структури та візуалу презентацій</label>
+                <label class="option-label"><input type="checkbox" name="q3_areas" value="Тести"> Автоматизація створення тестів та завдань</label>
+                <label class="option-label"><input type="checkbox" name="q3_areas" value="Візуалізація"> Інтерактивний контент: Розробка «розумних» тестів, віртуальних симуляцій, лабораторних/практичних тренажерів.</label>
+                <label class="option-label"><input type="checkbox" name="q3_areas" value="Конспекти"> Аналіз методичних джерел та конспектів</label>
+                <label class="option-label"><input type="checkbox" name="q3_areas" value="Методична робота"> Підготовка робочих програм та силабусів</label>
+            </div>
+
+            <div class="question-group">
+                <div class="question-title">2.2 Як змінився ваш баланс часу та якості?<span class="required">*</span></div>
+                <label class="option-label"><input type="radio" name="q4_time" value="Скоротився час" required> Скоротився час підготовки до занять без втрати якості.</label>
+                <label class="option-label"><input type="radio" name="q4_time" value="Зросла якість"> Час підготовки не змінився, але якість матеріалів суттєво зросла.</label>
+                <label class="option-label"><input type="radio" name="q4_time" value="Збільшився через перевірку"> Час підготовки збільшився через необхідність ретельного редагування відповідей ШІ.</label>
+            </div>
+        </div>
+
+        <!-- РОЗДІЛ 3 -->
+        <div class="card">
+            <div class="section-title">Розділ 3. Бар'єри та виклики</div>
+
+            <div class="question-group">
+                <div class="question-title">3.1 Головний практичний бар'єр:<span class="required">*</span></div>
+                <label class="option-label"><input type="radio" name="q5_barriers" value="Складність промптингу" required> Складність у формулюванні точних точних промптів.</label>
+                <label class="option-label"><input type="radio" name="q5_barriers" value="Списування студентів"> Ризик неконтрольованого списування студентів через ШІ.</label>
+                <label class="option-label"><input type="radio" name="q5_barriers" value="Технічний публікації"> Технічні бар'єри (публікація кодів, роботу з вебсервісами).</label>
+                <label class="option-label"><input type="radio" name="q5_barriers" value="Загальні відповіді ШІ"> Недостатньо точні або надто поверхневі відповіді ШІ.</label>
+                <label class="option-label"><input type="radio" name="q5_barriers" value="Немає бар'єрів"> Бар'єрів немає, усе працює зрозуміло.</label>
+            </div>
+
+            <div class="question-group">
+                <div class="question-title">3.2 Опишіть ваш найуспішніший кейс використання ШІ (за наявності):</div>
+                <textarea name="q6_case" placeholder="Наприклад: створення інтерактивного тесту для теми X, підготовка адаптованої лекції..."></textarea>
+            </div>
+
+            <div class="question-group">
+                <div class="question-title">3.3 Позиція щодо використання ШІ студентами:<span class="required">*</span></div>
+                <label class="option-label"><input type="radio" name="q7_students" value="Навчаю та інтегрую" required> Навчаю студентів критично викоритовувати ШІ для навчання.</label>
+                <label class="option-label"><input type="radio" name="q7_students" value="Дискутую та контролюю"> Дозволяю частково, але вимагаю вказувати промпти.</label>
+                <label class="option-label"><input type="radio" name="q7_students" value="Обмежую та перевіряю"> Обмежую використання ШІ при виконанні підсумкових робіт.</label>
+            </div>
+        </div>
+
+        <!-- РОЗДІЛ 4 -->
+        <div class="card">
+            <div class="section-title">Розділ 4. Перспективи та методичний запит</div>
+
+            <div class="question-group">
+                <div class="question-title">4.1 Які теми потребують додаткового розбору на засіданнях?</div>
+                <textarea name="q8_needs" placeholder="Промпт-інжиніринг, академічна доброчесність, конструювання симуляторів..."></textarea>
+            </div>
+
+            <div class="question-group">
+                <div class="question-title">4.2 Готовність до наставництва та обміну досвідом:<span class="required">*</span></div>
+                <label class="option-label"><input type="radio" name="q9_mentoring" value="Готовий виступити" required> Готовий(а) виступити з доповіддю/майстер-класом про власний досвід.</label>
+                <label class="option-label"><input type="radio" name="q9_mentoring" value="Консультації тет-а-тет"> Готовий(а) консультувати колег у форматі тет-а-тет.</label>
+                <label class="option-label"><input type="radio" name="q9_mentoring" value="Поки переймаю досвід"> Поки переймаю досвід колег.</label>
+            </div>
+
+            <div class="question-group">
+                <div class="question-title">4.3 Ваші побажання та пропозиції:</div>
+                <textarea name="q10_suggestions" placeholder="Ваші побажання щодо розвитку напряму ШІ в коледжі..."></textarea>
+            </div>
+        </div>
+
+        <button type="submit" class="btn-submit">Надіслати відповіді</button>
+    </form>
+
+    <div id="status-message"></div>
+</div>
+
+<script>
+    var scriptURL = "https://script.google.com/macros/s/AKfycbyZf3eHGsdNuQdN9UxmFGTT_VVpFTrtyBRAjyv-4h0nI73n_FtzRETFmGogM0I7cVO7/exec";
+    var form = document.getElementById('aiSurveyForm');
+    var statusMsg = document.getElementById('status-message');
+    var progressBar = document.getElementById('progress');
+
+    form.addEventListener('change', function() {
+        var total = form.querySelectorAll('.question-group').length;
+        var filled = 0;
+        var groups = form.querySelectorAll('.question-group');
+        groups.forEach(function(g) {
+            var inputs = g.querySelectorAll('input, textarea');
+            var isFilled = false;
+            inputs.forEach(function(i) {
+                if((i.type === 'radio' || i.type === 'checkbox') && i.checked) isFilled = true;
+                if(i.tagName === 'TEXTAREA' && i.value.trim() !== '') isFilled = true;
+            });
+            if(isFilled) filled++;
+        });
+        var pct = Math.round((filled / total) * 100);
+        progressBar.style.width = pct + '%';
+    });
+
+    form.addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        statusMsg.style.display = 'block';
+        statusMsg.className = 'status-success';
+        statusMsg.innerText = 'Надсилання відповідей... Зачекайте будь ласка.';
+
+        var checkedAreas = Array.from(document.querySelectorAll('input[name="q3_areas"]:checked')).map(function(cb) { return cb.value; }).join(', ');
+
+        var payload = {
+            timestamp: new Date().toLocaleString('uk-UA'),
+            q1_dynamics: getRadioValue('q1_dynamics'),
+            q2_notebooklm: getRadioValue('q2_notebooklm'),
+            q2_llm: getRadioValue('q2_llm'),
+            q2_video: getRadioValue('q2_video'),
+            q2_github: getRadioValue('q2_github'),
+            q3_areas: checkedAreas,
+            q4_time: getRadioValue('q4_time'),
+            q5_barriers: getRadioValue('q5_barriers'),
+            q6_case: form.q6_case.value,
+            q7_students: getRadioValue('q7_students'),
+            q8_needs: form.q8_needs.value,
+            q9_mentoring: getRadioValue('q9_mentoring'),
+            q10_suggestions: form.q10_suggestions.value
+        };
+
+        fetch(scriptURL, {
+            method: 'POST',
+            mode: 'no-cors',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+        })
+        .then(function() {
+            statusMsg.className = 'status-success';
+            statusMsg.innerText = 'Дякуємо! Ваші відповіді успішно збережені та передані в аналітичний звіт.';
+            form.reset();
+            progressBar.style.width = '100%';
+        })
+        .catch(function(error) {
+            statusMsg.className = 'status-error';
+            statusMsg.innerText = 'Помилка під час відправки. Перевірте з\'єднання з Інтернетом.';
+        });
+    });
+
+    function getRadioValue(name) {
+        var el = document.querySelector('input[name="' + name + '"]:checked');
+        return el ? el.value : '';
+    }
+</script>
+
+</body>
+</html>
